@@ -1,18 +1,18 @@
 from django.shortcuts import render,redirect
 
 # Create your views here.
-from .form import ImageForm
+
 from .models import Image
 
 def index(request):
     if request.method == "POST":
-        form=ImageForm(data=request.POST,files=request.FILES)
-        if form.is_valid():
-            form.save()
-            obj=form.instance
-            return render(request,"index.html",{"obj":obj})
-    else:
-        form=ImageForm()
-        img=Image.objects.all()
-    return render(request,"index.html", {"img":img,"form":form})
+        caption=request.POST['caption']
+        img=request.FILES.get("img")
+        images=Image(image=img,caption=caption)
+        images.save()
+        return redirect('/enter')
+    return render(request,"index.html", )
+def retrieve (request):
+    img = Image.objects.all()
+    return render(request,"index.html", {"img":img})
    
